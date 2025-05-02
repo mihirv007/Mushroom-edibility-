@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>mushroom edible</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="{{url_for('static',filename='mushroom_edibility.css')}}">
+</head>
+<body>
+    <h1>Mushroom Edibility Analysis</h1>
+    <div class='container'>
+        <button class='reset-button' id='reset-button' type='button' onclick='reset_form()'>
+            <i class="fa-solid fa-rotate-right"></i>
+        </button>
+        <form id='mushroom-form' action="{{url_for('predict')}}" method='POST'>
+            {{form.hidden_tag()}}
+            <div class="user-details">
+                <div class='input-box'>
+                    {{form.capDiameter.label(class_='label',for_='cap-diameter')}}
+                    {{form.capDiameter(class_='input',id='cap-diameter')}}
+                </div>
+                <div class='input-box'>
+                    {{form.capShape.label(class_='label',for_='cap-shape')}}
+                    {{form.capShape(class_='input',id='cap-shape')}}
+                </div>
+                <div class='input-box'>
+                    {{form.gillAttachment.label(class_='label',for_='gill-attachment')}}
+                    {{form.gillAttachment(class_='input',id='gill-attachment')}}
+                </div>
+                <div class='input-box'>
+                    {{form.gillColor.label(class_='label',for_='gill-color')}}
+                    {{form.gillColor(class_='input',id='gill-color')}}
+                </div>
+                <div class='input-box'>
+                    {{form.stemHeight.label(class_='label',for_='stem-height')}}
+                    {{form.stemHeight(class_='input',id='stem-height')}}
+                </div>
+                <div class='input-box'>
+                    {{form.stemWidth.label(class_='label',for_='stem-width')}}
+                    {{form.stemWidth(class_='input',id='stem-width')}}
+                </div>
+                <div class='input-box'>
+                    {{form.stemColor.label(class_='label',for_='stem-color')}}
+                    {{form.stemColor(class_='input',id='stem-color')}}
+                </div>
+                <div class='input-box'>
+                    {{form.season.label(class_='label',for_='season')}}
+                    {{form.season(class_='input',id='season')}}
+                </div>               
+            </div>   
+            <button class='submit_btn' type='submit'>Submit</button>          
+        </form>
+       
+        {%if predict_text %}
+            <h2>prediction:{{predict_text}}</h2>
+        {%endif%}
+    </div>
+    
+</body>
+<script>
+    function debounceFunc(func,delay){
+        let timeout;
+        return function(...args){
+            clearTimeout(timeout);
+            timeout=setTimeout(()=>func.apply(this,args),delay);
+        };
+    };
+
+    function inputLengthInteger(event,maxLength){
+        let user_int=event.target; 
+        user_int.value=user_int.value.replace(/[^0-9]/g,'');
+        if (user_int.value.length>maxLength){
+            user_int.value=user_int.value.slice(0,maxLength);
+        }
+    };
+
+    function inputLengthDecimal(event,maxLengthDecimal){
+        let inputDecimal=event.target;
+   
+        // Remove all non-numeric characters except for one dot
+        inputDecimal.value = inputDecimal.value.replace(/[^0-9.]/g, "");
+    
+        // Ensure only one dot (.) is allowed
+        inputDecimal.value = inputDecimal.value.replace(/(\..*)\./g, "$1");
+    
+        // Ensure the correct format: Single digit before the dot
+        let match = inputDecimal.value.match(/^(\d)?(\.\d*)?$/);
+        if (!match) {
+            inputDecimal.value = ""; // Clear input if format is incorrect
+        }
+    
+        if (inputDecimal.value.length > maxLengthDecimal){
+            inputDecimal.value=inputDecimal.value.slice(0,maxLengthDecimal);
+        }
+    };
+
+    function reset_form(){
+        document.getElementById('mushroom-form').reset();
+        window.location.href="{{url_for('predict')}}";
+    }
+
+    let refresh_button=document.getElementById('reset-button');
+    refresh_button.addEventListener('click',debounceFunc(reset_form,1000));
+
+    const dicMushroomLengthInteger=[
+        {id:'cap-diameter','maxLength':4},
+        {id:'cap-shape','maxLength':1},
+        {id:'gill-attachment','maxLength':1},
+        {id:'gill-color','maxLength':2},
+        {id:'stem-width','maxLength':4},
+        {id:'stem-color','maxLength':2}, 
+    ]
+
+    dicMushroomLengthInteger.forEach( config_input => {
+        const element=document.getElementById(config_input.id);
+        element.addEventListener('input',(event)=>inputLengthInteger(event,config_input.maxLength));
+    });
+
+    const dicMushroomLengthDecimal=[
+        {id:'stem-height','maxLength':10},
+        {id:'season','maxLength':10}
+    ]
+
+    dicMushroomLengthDecimal.forEach(config_input => {
+        const elementDecimal=document.getElementById(config_input.id);
+        elementDecimal.addEventListener('input',(event)=>inputLengthDecimal(event,config_input.maxLength));
+    });
+
+</script>
+</html>

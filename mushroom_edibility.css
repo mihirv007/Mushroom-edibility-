@@ -1,0 +1,123 @@
+*{
+    margin:0;
+    padding:0;
+    font-size: 16px;
+    box-sizing: border-box;
+    font-family:sans-serif ;
+}
+
+h1{
+    font-size:clamp(1rem,5vw,2rem);
+    font-weight: 800;
+    color: #674636;
+    letter-spacing: -1.6px;
+}
+
+body{
+    height:100dvh;
+    width: 100%;
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #FFF8E8;
+    overflow:hidden;
+    gap: 1rem;
+}
+
+.container{
+    width:clamp(300px,50vw,800px);
+    display:flex;
+    flex-direction: column;
+    position:relative;
+    flex-wrap: wrap;
+    justify-content: center;
+    background-color:rgb(247, 238, 212);
+    border-radius: 3px;
+    padding:1.2rem;
+    gap:1rem;
+    box-shadow: 0px 0px 7px 7px rgba(45,45,45,0.1);
+}
+
+.user-details{
+    width:100%;
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:space-between;   
+    border-radius: 3px;
+    gap:0.7rem;
+    padding-bottom:1rem;
+}
+
+.reset-button{
+    width:calc(100%/22);
+    display: flex;
+    align-items: center;
+    justify-content:center;
+    align-self: flex-end;
+    border-radius: 50%;
+    border: none;
+    outline:none;
+    background: none;
+}
+
+.reset-button:hover{
+    color:#674636;
+}
+
+label{
+    font-size: clamp(14px,2vw,16px);
+}
+
+.input-box{
+    width:calc(100%/2 - 20px);
+}
+
+.input{
+    height:clamp(2rem,5vw,3rem);
+    width:100%;
+    border:3px solid white;
+    border-radius: 3px;  
+    transition: all 0.7s ease;
+    padding-left: 1px;
+}
+
+.input:hover{
+    border:3px solid #AAB396;
+}
+
+.input:focus{
+    outline:none;
+}
+
+.submit_btn{
+    height:45px;
+    width:100%;
+    font-size: clamp(1rem,5vw,1.5rem);
+    font-weight: 800;
+    color:#AAB396;
+    border: 3px solid white;
+    transition: all 0.7s ease;
+    border-radius: 3px;
+}
+
+.submit_btn:hover{
+    color:#674636;
+    background-color: #AAB396;
+}
+
+@media (max-width:564px){
+
+    .input-box{
+        width:100%;
+    }
+   
+    .user-details{
+        max-height: 300px;
+        overflow-y: scroll;
+    }
+
+    .user-details::-webkit-scrollbar{
+        width:0;
+    }
+}
